@@ -1,0 +1,53 @@
+{
+  "version": "2026.07.01",
+  "category": "Scientific Publisher",
+  "entries": [
+    {
+      "id": "SCI_NATURE",
+      "name": "Nature Portfolio",
+      "domain": "nature.com",
+      "sourceType": "Academic Journal",
+      "recognitionScore": 100,
+      "peerReviewed": true,
+      "aliases": ["nature.com", "www.nature.com"]
+    },
+    {
+      "id": "SCI_IEEE",
+      "name": "IEEE Xplore",
+      "domain": "ieee.org",
+      "sourceType": "Scientific Publisher",
+      "recognitionScore": 98,
+      "isStandardsOrganization": true,
+      "peerReviewed": true,
+      "aliases": ["ieee.org", "ieeexplore.ieee.org", "www.ieee.org"]
+    },
+    {
+      "id": "SCI_ACM",
+      "name": "ACM Digital Library",
+      "domain": "acm.org",
+      "sourceType": "Scientific Publisher",
+      "recognitionScore": 98,
+      "peerReviewed": true,
+      "aliases": ["acm.org", "dl.acm.org", "www.acm.org"]
+    },
+    {
+      "id": "SCI_SCIENCE",
+      "name": "Science / AAAS",
+      "domain": "science.org",
+      "sourceType": "Academic Journal",
+      "recognitionScore": 100,
+      "peerReviewed": true,
+      "aliases": ["science.org", "www.science.org"]
+    },
+    {
+      "id": "SCI_ARXIV",
+      "name": "arXiv Pre-print Archive",
+      "domain": "arxiv.org",
+      "sourceType": "Research Repository",
+      "recognitionScore": 85,
+      "isResearchRepository": true,
+      "peerReviewed": false,
+      "aliases": ["arxiv.org", "www.arxiv.org"]
+    }
+  ]
+}

@@ -10,6 +10,7 @@ import reportsRoutes from './modules/reports/routes/reports.routes.js';
 import claimsRoutes from './modules/claims/routes/claims.routes.js';
 import sourcesRoutes from './modules/sources/routes/sources.routes.js';
 import pipelineRoutes from './modules/pipeline/routes/pipeline.routes.js';
+import verificationRoutes from './modules/verification/routes/verification.routes.js';
 import { notFoundMiddleware } from './middleware/notFound.middleware.js';
 import { errorMiddleware } from './middleware/error.middleware.js';
 import { loggerMiddleware } from './middleware/logger.middleware.js';
@@ -32,6 +33,7 @@ app.use('/api/v1/reports', reportsRoutes);
 app.use('/api/v1/claims', claimsRoutes);
 app.use('/api/v1/sources', sourcesRoutes);
 app.use('/api/v1/pipeline', pipelineRoutes);
+app.use('/api/v1/verification', verificationRoutes);
 
 // Error Handling Middlewares
 app.use(notFoundMiddleware);

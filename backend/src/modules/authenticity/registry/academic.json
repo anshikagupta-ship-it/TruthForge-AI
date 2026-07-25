@@ -1,0 +1,57 @@
+{
+  "version": "2026.07.01",
+  "category": "University",
+  "entries": [
+    {
+      "id": "ACA_PUBMED",
+      "name": "PubMed Central / NCBI",
+      "domain": "pubmed.ncbi.nlm.nih.gov",
+      "sourceType": "Research Repository",
+      "recognitionScore": 100,
+      "isResearchRepository": true,
+      "isMedicalAuthority": true,
+      "peerReviewed": true,
+      "aliases": ["pubmed.ncbi.nlm.nih.gov", "ncbi.nlm.nih.gov"]
+    },
+    {
+      "id": "ACA_HARVARD",
+      "name": "Harvard University",
+      "domain": "harvard.edu",
+      "sourceType": "University",
+      "recognitionScore": 98,
+      "isEducationalInstitution": true,
+      "peerReviewed": false,
+      "aliases": ["harvard.edu", "www.harvard.edu"]
+    },
+    {
+      "id": "ACA_MIT",
+      "name": "Massachusetts Institute of Technology",
+      "domain": "mit.edu",
+      "sourceType": "University",
+      "recognitionScore": 98,
+      "isEducationalInstitution": true,
+      "peerReviewed": false,
+      "aliases": ["mit.edu", "www.mit.edu"]
+    },
+    {
+      "id": "ACA_OXFORD",
+      "name": "University of Oxford",
+      "domain": "ox.ac.uk",
+      "sourceType": "University",
+      "recognitionScore": 98,
+      "isEducationalInstitution": true,
+      "peerReviewed": false,
+      "aliases": ["ox.ac.uk", "www.ox.ac.uk"]
+    },
+    {
+      "id": "ACA_STANFORD",
+      "name": "Stanford University",
+      "domain": "stanford.edu",
+      "sourceType": "University",
+      "recognitionScore": 98,
+      "isEducationalInstitution": true,
+      "peerReviewed": false,
+      "aliases": ["stanford.edu", "www.stanford.edu"]
+    }
+  ]
+}

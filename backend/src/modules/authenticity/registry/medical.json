@@ -1,0 +1,58 @@
+{
+  "version": "2026.07.01",
+  "category": "Medical Organization",
+  "entries": [
+    {
+      "id": "MED_WHO",
+      "name": "World Health Organization",
+      "domain": "who.int",
+      "sourceType": "International Organization",
+      "recognitionScore": 100,
+      "isMedicalAuthority": true,
+      "isInternationalOrganization": true,
+      "peerReviewed": false,
+      "aliases": ["who.int", "www.who.int"]
+    },
+    {
+      "id": "MED_EMA",
+      "name": "European Medicines Agency",
+      "domain": "ema.europa.eu",
+      "sourceType": "Medical Organization",
+      "recognitionScore": 95,
+      "isMedicalAuthority": true,
+      "isGovernmentOwned": true,
+      "peerReviewed": false,
+      "aliases": ["ema.europa.eu"]
+    },
+    {
+      "id": "MED_LANCET",
+      "name": "The Lancet",
+      "domain": "thelancet.com",
+      "sourceType": "Academic Journal",
+      "recognitionScore": 98,
+      "isMedicalAuthority": true,
+      "peerReviewed": true,
+      "aliases": ["thelancet.com", "www.thelancet.com"]
+    },
+    {
+      "id": "MED_NEJM",
+      "name": "New England Journal of Medicine",
+      "domain": "nejm.org",
+      "sourceType": "Academic Journal",
+      "recognitionScore": 98,
+      "isMedicalAuthority": true,
+      "peerReviewed": true,
+      "aliases": ["nejm.org", "www.nejm.org"]
+    },
+    {
+      "id": "MED_BMJ",
+      "name": "The BMJ (British Medical Journal)",
+      "domain": "bmj.com",
+      "sourceType": "Academic Journal",
+      "recognitionScore": 95,
+      "isMedicalAuthority": true,
+      "peerReviewed": true,
+      "aliases": ["bmj.com", "www.bmj.com"]
+    }
+  ]
+}

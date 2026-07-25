@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "description": "Score range mappings to human-interpretable AuthenticityLevels",
+  "thresholds": [
+    { "level": "VERY_HIGH", "minScore": 90, "maxScore": 100 },
+    { "level": "HIGH",      "minScore": 75, "maxScore": 89 },
+    { "level": "MEDIUM",    "minScore": 55, "maxScore": 74 },
+    { "level": "LOW",       "minScore": 30, "maxScore": 54 },
+    { "level": "UNKNOWN",   "minScore": 0,  "maxScore": 29 }
+  ]
+}

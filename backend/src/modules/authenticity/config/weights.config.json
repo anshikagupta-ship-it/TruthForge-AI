@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "description": "Configurable factor weights for deterministic source authenticity scoring",
+  "weights": {
+    "authorityRegistryMatch": 0.35,
+    "institutionRecognition": 0.25,
+    "topLevelDomainTrust": 0.15,
+    "publisherTypeWeight": 0.10,
+    "peerReviewedStatus": 0.10,
+    "securityProtocol": 0.05
+  }
+}

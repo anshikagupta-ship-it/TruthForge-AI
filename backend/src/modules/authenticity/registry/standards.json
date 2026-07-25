@@ -1,0 +1,33 @@
+{
+  "version": "2026.07.01",
+  "category": "Standards Organization",
+  "entries": [
+    {
+      "id": "STD_ISO",
+      "name": "International Organization for Standardization",
+      "domain": "iso.org",
+      "sourceType": "Standards Organization",
+      "recognitionScore": 100,
+      "isStandardsOrganization": true,
+      "aliases": ["iso.org", "www.iso.org"]
+    },
+    {
+      "id": "STD_W3C",
+      "name": "World Wide Web Consortium",
+      "domain": "w3.org",
+      "sourceType": "Standards Organization",
+      "recognitionScore": 98,
+      "isStandardsOrganization": true,
+      "aliases": ["w3.org", "www.w3.org"]
+    },
+    {
+      "id": "STD_IETF",
+      "name": "Internet Engineering Task Force",
+      "domain": "ietf.org",
+      "sourceType": "Standards Organization",
+      "recognitionScore": 98,
+      "isStandardsOrganization": true,
+      "aliases": ["ietf.org", "www.ietf.org"]
+    }
+  ]
+}

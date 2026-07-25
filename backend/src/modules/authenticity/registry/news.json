@@ -1,0 +1,30 @@
+{
+  "version": "2026.07.01",
+  "category": "News Organization",
+  "entries": [
+    {
+      "id": "NEWS_BBC",
+      "name": "BBC News",
+      "domain": "bbc.co.uk",
+      "sourceType": "News Organization",
+      "recognitionScore": 85,
+      "aliases": ["bbc.co.uk", "bbc.com", "www.bbc.com", "news.bbc.co.uk"]
+    },
+    {
+      "id": "NEWS_REUTERS",
+      "name": "Reuters",
+      "domain": "reuters.com",
+      "sourceType": "News Organization",
+      "recognitionScore": 90,
+      "aliases": ["reuters.com", "www.reuters.com"]
+    },
+    {
+      "id": "NEWS_AP",
+      "name": "Associated Press",
+      "domain": "apnews.com",
+      "sourceType": "News Organization",
+      "recognitionScore": 90,
+      "aliases": ["apnews.com", "www.apnews.com"]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "version": "2026.07.01",
+  "category": "Government",
+  "entries": [
+    {
+      "id": "GOV_NIH",
+      "name": "National Institutes of Health",
+      "domain": "nih.gov",
+      "sourceType": "Government",
+      "recognitionScore": 100,
+      "isGovernmentOwned": true,
+      "isMedicalAuthority": true,
+      "peerReviewed": true,
+      "aliases": ["nih.gov", "www.nih.gov", "ncbi.nlm.nih.gov"]
+    },
+    {
+      "id": "GOV_CDC",
+      "name": "Centers for Disease Control and Prevention",
+      "domain": "cdc.gov",
+      "sourceType": "Government",
+      "recognitionScore": 100,
+      "isGovernmentOwned": true,
+      "isMedicalAuthority": true,
+      "peerReviewed": false,
+      "aliases": ["cdc.gov", "www.cdc.gov"]
+    },
+    {
+      "id": "GOV_NASA",
+      "name": "National Aeronautics and Space Administration",
+      "domain": "nasa.gov",
+      "sourceType": "Government",
+      "recognitionScore": 100,
+      "isGovernmentOwned": true,
+      "peerReviewed": false,
+      "aliases": ["nasa.gov", "www.nasa.gov"]
+    },
+    {
+      "id": "GOV_FDA",
+      "name": "Food and Drug Administration",
+      "domain": "fda.gov",
+      "sourceType": "Government",
+      "recognitionScore": 100,
+      "isGovernmentOwned": true,
+      "isMedicalAuthority": true,
+      "peerReviewed": false,
+      "aliases": ["fda.gov", "www.fda.gov"]
+    },
+    {
+      "id": "GOV_NIST",
+      "name": "National Institute of Standards and Technology",
+      "domain": "nist.gov",
+      "sourceType": "Standards Organization",
+      "recognitionScore": 100,
+      "isGovernmentOwned": true,
+      "isStandardsOrganization": true,
+      "peerReviewed": false,
+      "aliases": ["nist.gov", "www.nist.gov"]
+    }
+  ]
+}

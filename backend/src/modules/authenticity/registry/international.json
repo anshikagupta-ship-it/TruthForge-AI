@@ -1,0 +1,42 @@
+{
+  "version": "2026.07.01",
+  "category": "International Organization",
+  "entries": [
+    {
+      "id": "INT_UN",
+      "name": "United Nations",
+      "domain": "un.org",
+      "sourceType": "International Organization",
+      "recognitionScore": 100,
+      "isInternationalOrganization": true,
+      "aliases": ["un.org", "www.un.org"]
+    },
+    {
+      "id": "INT_UNICEF",
+      "name": "UNICEF",
+      "domain": "unicef.org",
+      "sourceType": "International Organization",
+      "recognitionScore": 98,
+      "isInternationalOrganization": true,
+      "aliases": ["unicef.org", "www.unicef.org"]
+    },
+    {
+      "id": "INT_WORLDBANK",
+      "name": "World Bank Group",
+      "domain": "worldbank.org",
+      "sourceType": "International Organization",
+      "recognitionScore": 98,
+      "isInternationalOrganization": true,
+      "aliases": ["worldbank.org", "www.worldbank.org"]
+    },
+    {
+      "id": "INT_OECD",
+      "name": "OECD",
+      "domain": "oecd.org",
+      "sourceType": "International Organization",
+      "recognitionScore": 95,
+      "isInternationalOrganization": true,
+      "aliases": ["oecd.org", "www.oecd.org"]
+    }
+  ]
+}

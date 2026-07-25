@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "levels": [
+    { "level": "VERY_HIGH", "min": 90, "max": 100 },
+    { "level": "HIGH", "min": 75, "max": 89 },
+    { "level": "MEDIUM", "min": 55, "max": 74 },
+    { "level": "LOW", "min": 35, "max": 54 },
+    { "level": "VERY_LOW", "min": 0, "max": 34 }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "penalties": {
+    "contradictingEvidence": {
+      "baseDeductionPerItem": 15,
+      "maxDeduction": 45
+    },
+    "duplicateSources": {
+      "deduction": 10
+    },
+    "lowSourceDiversity": {
+      "threshold": 1,
+      "deduction": 15
+    },
+    "brokenProvenance": {
+      "deduction": 25
+    },
+    "weakRetrieval": {
+      "threshold": 50,
+      "deduction": 12
+    },
+    "unknownSources": {
+      "deductionPerUnknown": 10,
+      "maxDeduction": 30
+    },
+    "missingEvidence": {
+      "deduction": 35
+    }
+  }
+}

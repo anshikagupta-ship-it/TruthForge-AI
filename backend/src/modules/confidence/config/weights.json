@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "profile": "default",
+  "weights": {
+    "verificationStrength": 0.25,
+    "evidenceStrength": 0.20,
+    "sourceAuthenticity": 0.20,
+    "provenanceCompleteness": 0.15,
+    "evidenceAgreement": 0.10,
+    "evidenceCoverage": 0.05,
+    "retrievalQuality": 0.05
+  }
+}

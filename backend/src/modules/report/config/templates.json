@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "explanationTemplates": {
+    "CLAIM_SUPPORTED": "Claim supported by {{supportingCount}} evidence items from {{sourceCount}} unique domain(s) with an average source authenticity score of {{avgAuthenticity}}%.",
+    "CLAIM_CONTRADICTED": "Claim contradicted by {{contradictingCount}} evidence item(s) from higher-authority sources (Average authenticity: {{avgAuthenticity}}%).",
+    "CLAIM_PARTIALLY_SUPPORTED": "Claim partially supported by {{supportingCount}} evidence item(s) with partial semantic alignment and {{contradictingCount}} conflicting snippet(s).",
+    "CLAIM_INSUFFICIENT_EVIDENCE": "Insufficient evidence to verify claim statement. Only {{supportingCount}} evidence item(s) retrieved meeting quality thresholds.",
+    "CLAIM_UNVERIFIABLE": "Claim statement is unverifiable due to missing domain sources or broken provenance chains.",
+    "PENALTY_SINGLE_SOURCE": "Confidence score reduced by {{penaltyPoints}} points due to single source domain dependency (Domain: {{domain}}).",
+    "PENALTY_LOW_AUTHENTICITY": "Confidence score reduced by {{penaltyPoints}} points due to low average source domain authenticity score ({{avgAuthenticity}}%).",
+    "PENALTY_CONTRADICTION": "Confidence score reduced by {{penaltyPoints}} points due to presence of contradictory evidence snippets.",
+    "PENALTY_INCOMPLETE_LINEAGE": "Confidence score reduced by {{penaltyPoints}} points due to partial or broken evidence lineage graph nodes.",
+    "PENALTY_LOW_RELEVANCE": "Confidence score reduced by {{penaltyPoints}} points due to low semantic vector relevance scores across evidence items."
+  },
+  "verdictSummaries": {
+    "FULLY_SUPPORTED": "All claims extracted from the research query are fully supported by high-authority evidence and complete provenance lineage.",
+    "PARTIALLY_SUPPORTED": "The majority of extracted claims are supported, though some claims exhibit partial alignment or minor evidence gaps.",
+    "CONTRADICTED": "One or more core claims are directly contradicted by verified high-authority domain sources.",
+    "INSUFFICIENT_EVIDENCE": "The retrieved evidence is insufficient to conclusively support or contradict the research query claims.",
+    "MIXED_EVIDENCE": "The pipeline identified conflicting evidence across multiple independent sources."
+  }
+}

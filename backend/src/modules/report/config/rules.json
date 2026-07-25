@@ -1,0 +1,10 @@
+{
+  "strictValidation": true,
+  "allowPartialLineage": true,
+  "enableAiEnhancement": false,
+  "maxClaimExplanationsPerClaim": 5,
+  "maxEvidenceItemsInSummary": 50,
+  "checksumAlgorithm": "sha256",
+  "engineVersion": "1.0.0",
+  "pipelineVersion": "1.0.0"
+}

@@ -1,0 +1,35 @@
+{
+  "formats": {
+    "json": {
+      "mimeType": "application/json",
+      "extension": ".json",
+      "formatter": "JSONFormatter",
+      "renderer": "JSONRenderer"
+    },
+    "markdown": {
+      "mimeType": "text/markdown",
+      "extension": ".md",
+      "formatter": "MarkdownFormatter",
+      "renderer": "MarkdownRenderer"
+    },
+    "html": {
+      "mimeType": "text/html",
+      "extension": ".html",
+      "formatter": "HTMLFormatter",
+      "renderer": "HTMLRenderer"
+    },
+    "pdf": {
+      "mimeType": "application/pdf",
+      "extension": ".pdf",
+      "formatter": "PDFFormatter",
+      "renderer": "PDFRenderer"
+    },
+    "text": {
+      "mimeType": "text/plain",
+      "extension": ".txt",
+      "formatter": "TextFormatter",
+      "renderer": "TextRenderer"
+    }
+  },
+  "defaultFormats": ["json", "markdown", "html", "pdf", "text"]
+}

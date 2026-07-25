@@ -1,0 +1,74 @@
+{
+  "sections": [
+    {
+      "id": "sec-1-executive-summary",
+      "order": 1,
+      "title": "Executive Summary",
+      "builder": "ExecutiveSummaryBuilder",
+      "required": true
+    },
+    {
+      "id": "sec-2-query-context",
+      "order": 2,
+      "title": "Query & Research Context",
+      "builder": "QueryContextBuilder",
+      "required": true
+    },
+    {
+      "id": "sec-3-overall-verdict",
+      "order": 3,
+      "title": "Overall Pipeline Verdict",
+      "builder": "OverallVerdictBuilder",
+      "required": true
+    },
+    {
+      "id": "sec-4-claim-verification",
+      "order": 4,
+      "title": "Claim Verification Results",
+      "builder": "ClaimVerificationBuilder",
+      "required": true
+    },
+    {
+      "id": "sec-5-confidence-analysis",
+      "order": 5,
+      "title": "Confidence Analysis & Penalties",
+      "builder": "ConfidenceAnalysisBuilder",
+      "required": true
+    },
+    {
+      "id": "sec-6-evidence-summary",
+      "order": 6,
+      "title": "Evidence Summary & Coverage",
+      "builder": "EvidenceSummaryBuilder",
+      "required": true
+    },
+    {
+      "id": "sec-7-source-authenticity",
+      "order": 7,
+      "title": "Source Authenticity & Domain Trust",
+      "builder": "SourceAuthenticityBuilder",
+      "required": true
+    },
+    {
+      "id": "sec-8-provenance-summary",
+      "order": 8,
+      "title": "Provenance & Lineage Traceability",
+      "builder": "ProvenanceSummaryBuilder",
+      "required": true
+    },
+    {
+      "id": "sec-9-limitations",
+      "order": 9,
+      "title": "System Limitations & Disclosures",
+      "builder": "LimitationsBuilder",
+      "required": true
+    },
+    {
+      "id": "sec-10-appendix",
+      "order": 10,
+      "title": "Appendix & Execution Audit Trail",
+      "builder": "AppendixBuilder",
+      "required": true
+    }
+  ]
+}

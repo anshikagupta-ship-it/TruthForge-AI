@@ -3,6 +3,12 @@
  */
 
 export const logger = {
+  debug: (message, meta = {}) => {
+    if (process.env.NODE_ENV === 'development' || process.env.DEBUG) {
+      console.log(`[DEBUG] [${new Date().toISOString()}] ${message}`, Object.keys(meta).length ? meta : '');
+    }
+  },
+
   info: (message, meta = {}) => {
     console.log(`[INFO] [${new Date().toISOString()}] ${message}`, Object.keys(meta).length ? meta : '');
   },

@@ -1,8 +1,10 @@
 import { env } from './config/env.js';
 import app from './app.js';
 
-const server = app.listen(env.port, () => {
-  console.log(`[TruthForge-AI Backend] Server running on port ${env.port}`);
+const HOST = '0.0.0.0';
+
+const server = app.listen(env.port, HOST, () => {
+  console.log(`[TruthForge-AI Backend] Server running on ${HOST}:${env.port}`);
   console.log(`[TruthForge-AI Backend] Environment: ${env.nodeEnv}`);
   console.log(`[TruthForge-AI Backend] Health Check: http://localhost:${env.port}/api/v1/health`);
 });

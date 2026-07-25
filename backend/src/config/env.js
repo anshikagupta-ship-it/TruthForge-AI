@@ -2,9 +2,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Critical variables required for database and external connections
 const requiredEnvVars = [
-  'PORT',
-  'NODE_ENV',
   'SUPABASE_URL',
   'SUPABASE_ANON_KEY',
   'SUPABASE_SERVICE_ROLE_KEY',
@@ -20,9 +19,9 @@ if (missingEnvVars.length > 0) {
 }
 
 export const env = Object.freeze({
-  port: parseInt(process.env.PORT, 10) || 5000,
+  port: parseInt(process.env.PORT || '5000', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
-  isDevelopment: process.env.NODE_ENV === 'development',
+  isDevelopment: (process.env.NODE_ENV || 'development') === 'development',
   isProduction: process.env.NODE_ENV === 'production',
   supabase: {
     url: process.env.SUPABASE_URL,
@@ -30,3 +29,4 @@ export const env = Object.freeze({
     serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
   },
 });
+

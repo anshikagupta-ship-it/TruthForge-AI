@@ -150,6 +150,10 @@ export class FullPipelineService {
           csvPath
         ]
       );
+      py.on("error", err => {
+        console.error("[PYTHON SPAWN ERROR]", err);
+        reject(err);
+      });
 
       const scriptTimeout = setTimeout(() => {
         py.kill();

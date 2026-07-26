@@ -1,13 +1,18 @@
 import io
 import os
 import time
+print(1,flush=True)
 import requests
+print(2,flush=True)
 import config
+print(3,flush=True)
 import filter1
+print(4,flush=True)
 import time
 import csv
 import clean_csv
 from concurrent.futures import ThreadPoolExecutor
+print(5,flush=True)
 from sentence_transformers import util
 
 try:

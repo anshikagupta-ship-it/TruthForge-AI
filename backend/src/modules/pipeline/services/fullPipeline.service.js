@@ -126,6 +126,10 @@ export class FullPipelineService {
 
 
     await fs.mkdir("./temp", { recursive: true });
+
+
+    // 1. Define a unique file path for this specific pipeline run
+    const csvPath = `./temp/matches_${queryId}.csv`;
     console.log("[9] Launching Python");
     console.log({
       executable: process.platform === "win32" ? "python" : "python3",
@@ -133,10 +137,6 @@ export class FullPipelineService {
       query,
       csvPath
     });
-
-    // 1. Define a unique file path for this specific pipeline run
-    const csvPath = `./temp/matches_${queryId}.csv`;
-
     await new Promise((resolve, reject) => {
       const py = spawn(process.platform === "win32" ? "python" : "python3", [
         "./retriever/index.py",

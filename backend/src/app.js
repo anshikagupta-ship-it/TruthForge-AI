@@ -35,6 +35,27 @@ app.use('/api/v1/sources', sourcesRoutes);
 app.use('/api/v1/pipeline', pipelineRoutes);
 app.use('/api/v1/verification', verificationRoutes);
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendDistPath = path.join(__dirname, '../../frontend/dist');
+
+// Serve static frontend build if present
+app.use(express.static(frontendDistPath));
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  res.sendFile(path.join(frontendDistPath, 'index.html'), (err) => {
+    if (err) {
+      next();
+    }
+  });
+});
+
 // Error Handling Middlewares
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

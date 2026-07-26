@@ -24,6 +24,7 @@ app.use(morgan(env.isDevelopment ? 'dev' : 'combined'));
 app.use(loggerMiddleware);
 
 app.use(express.json());
+app.use(express.text({ type: ['text/plain', 'text/*'] }));
 app.use(express.urlencoded({ extended: true }));
 
 // Core API Routes

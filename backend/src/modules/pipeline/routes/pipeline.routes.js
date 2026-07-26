@@ -8,6 +8,7 @@ import {
 
 const router = Router();
 
+router.post('/execute-full-verification', (req, res, next) => pipelineController.executeFullVerification(req, res, next));
 router.post('/', validateCreatePipelineRun, pipelineController.create);
 router.get('/', pipelineController.getAll);
 router.get('/:id', validatePipelineIdParam, pipelineController.getById);

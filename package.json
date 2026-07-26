@@ -4,8 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "postinstall": "cd backend && npm install",
+    "postinstall": "cd backend && npm install && cd ../frontend && npm install",
     "start": "cd backend && npm start",
-    "dev": "cd backend && npm run dev"
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "cd backend && npm run dev",
+    "test:backend": "cd backend && node src/scripts/test_full_pipeline.js"
   }
 }

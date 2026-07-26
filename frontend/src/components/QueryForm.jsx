@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
-import { Search, Sparkles, Sliders, Layers } from 'lucide-react';
-
-const DOMAINS = ['Technology', 'Medicine', 'Finance', 'Science', 'Law', 'Education', 'Environment'];
+import { Search, Sparkles } from 'lucide-react';
 
 export function QueryForm({ onSubmit, isLoading }) {
   const [query, setQuery] = useState('Does artificial intelligence increase diagnostic accuracy in radiology?');
-  const [domain, setDomain] = useState('Technology');
   const [depth, setDepth] = useState('Detailed');
-  const [maxSources, setMaxSources] = useState(20);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!query.trim() || isLoading) return;
-    onSubmit({ query: query.trim(), domain, depth, max_sources: Number(maxSources) });
+    onSubmit({ query: query.trim(), depth });
   };
 
   return (
@@ -43,29 +39,11 @@ export function QueryForm({ onSubmit, isLoading }) {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-          <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: '500' }}>
-              Target Domain
-            </label>
-            <select
-              className="input-glass select-glass"
-              value={domain}
-              onChange={(e) => setDomain(e.target.value)}
-              disabled={isLoading}
-            >
-              {DOMAINS.map(d => (
-                <option key={d} value={d} style={{ background: '#121826', color: '#fff' }}>
-                  {d}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: '500' }}>
-              Verification Depth
-            </label>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '20px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: '500' }}>
+              Verification Depth:
+            </span>
             <div style={{ display: 'flex', gap: '8px' }}>
               {['Basic', 'Detailed'].map(d => (
                 <button
@@ -74,8 +52,7 @@ export function QueryForm({ onSubmit, isLoading }) {
                   onClick={() => setDepth(d)}
                   disabled={isLoading}
                   style={{
-                    flex: 1,
-                    padding: '10px',
+                    padding: '6px 16px',
                     borderRadius: '8px',
                     border: '1px solid var(--border-glass)',
                     background: depth === d ? 'var(--primary-glow)' : 'var(--bg-glass)',
@@ -91,31 +68,16 @@ export function QueryForm({ onSubmit, isLoading }) {
             </div>
           </div>
 
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: '500' }}>
-                Max Evidence Sources
-              </label>
-              <span style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: '700' }}>{maxSources}</span>
-            </div>
-            <input
-              type="range"
-              min="5"
-              max="50"
-              step="5"
-              value={maxSources}
-              onChange={(e) => setMaxSources(e.target.value)}
-              disabled={isLoading}
-              style={{ width: '100%', accentColor: 'var(--primary)', cursor: 'pointer' }}
-            />
-          </div>
+          <span style={{ fontSize: '0.8rem', color: 'var(--accent-cyan)', fontWeight: '500' }}>
+            🌐 Automated Multi-Domain Source Ingestion Enabled
+          </span>
         </div>
 
         <button type="submit" className="btn-primary" style={{ width: '100%' }} disabled={isLoading}>
           {isLoading ? (
             <>
               <div className="animate-spin-slow" style={{ width: '18px', height: '18px', border: '2px solid #fff', borderTopColor: 'transparent', borderRadius: '50%' }} />
-              <span>Orchestrating Knowledge Verification Pipeline...</span>
+              <span>Orchestrating Multi-Domain Verification Pipeline...</span>
             </>
           ) : (
             <>

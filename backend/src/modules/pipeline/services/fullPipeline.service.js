@@ -16,6 +16,8 @@ import { ConfidenceEngineService } from '../../confidence/services/confidenceEng
 import { EvidenceLineageService } from '../../lineage/services/evidenceLineage.service.js';
 import { ReportGeneratorService } from '../../report/services/reportGenerator.service.js';
 import { logger } from '../../../utils/logger.js';
+import { spawn } from "child_process";
+import fs from "fs/promises";
 
 // Domain Trusted Source Mappings according to kartikeya specification
 const DOMAIN_SOURCES_MAP = {
@@ -119,35 +121,53 @@ export class FullPipelineService {
       trustedSources = Object.values(DOMAIN_SOURCES_MAP).flatMap(sources => sources.slice(0, 2));
     }
 
-    // Step 4: Construct Evidence Batch
-    const mockEvidenceCsvRows = trustedSources.flatMap((src, idx) => [
-      {
-        url: `${src.url}/article-${idx + 1}`,
-        semantic_score: (0.95 - (idx % 5) * 0.04).toFixed(2),
-        score: (0.92 - (idx % 5) * 0.03).toFixed(2),
-        text: `Empirical findings published by ${src.publisher} confirm that ${query} demonstrates strong positive alignment and statistical reliability.`
-      },
-      {
-        url: `${src.url}/research-paper-${idx + 1}`,
-        semantic_score: (0.89 - (idx % 5) * 0.03).toFixed(2),
-        score: (0.86 - (idx % 5) * 0.02).toFixed(2),
-        text: `Peer-reviewed evaluations from ${src.title} show cross-verified evidence supporting claims regarding ${query}.`
-      }
-    ]);
 
-    const csvContent = [
-      'query,source_url,semantic_score,bonus,score,text',
-      ...mockEvidenceCsvRows.map(r => `"${query.replace(/"/g, '""')}","${r.url}",${r.semantic_score},0.0,${r.score},"${r.text.replace(/"/g, '""')}"`)
-    ].join('\n');
+
+
+
+    await new Promise((resolve, reject) => {
+
+      const py = spawn(process.platform === "win32" ? "python" : "python3", [
+        "./retriever/index.py",
+        "--query",
+        query,
+        "--output",
+        "./temp/matches.csv"
+      ]);
+
+      py.stdout.on("data", d => console.log(d.toString()));
+
+      py.stderr.on("data", d => console.error(d.toString()));
+
+      py.on("close", code => {
+        if (code === 0)
+          resolve();
+        else
+          reject(new Error("Retriever failed"));
+      });
+
+    });
+    const csvContent = await fs.readFile(
+      "./temp/matches.csv",
+      "utf8"
+    );
 
     const provider = new CsvEvidenceProvider();
-    const { evidenceBatch: ingestedBatch } = await provider.ingest(csvContent, { filename: 'retrieval_evidence.csv' });
+
+    const { evidenceBatch: ingestedBatch } =
+      await provider.ingest(csvContent, {
+        filename: "retrieval_evidence.csv"
+      });
+    const rawEvidence =
+      ingestedBatch.evidences ??
+      ingestedBatch.evidence ??
+      [];
 
     const evidenceBatch = {
       batchId: `eb-${queryId}`,
       queryId,
       query,
-      evidence: (ingestedBatch.evidences || []).map((e, idx) => ({
+      evidence: rawEvidence.map((e, idx) => ({
         evidenceId: e.id || `ev-${idx + 1}`,
         id: e.id || `ev-${idx + 1}`,
         text: e.text || `Evidence content snippet ${idx + 1}`,
@@ -156,7 +176,7 @@ export class FullPipelineService {
         retrievalScore: e.retrievalScore || 0.90,
         relevance: e.retrievalScore || 0.90
       })),
-      evidences: (ingestedBatch.evidences || []).map((e, idx) => ({
+      evidences: rawEvidence.map((e, idx) => ({
         evidenceId: e.id || `ev-${idx + 1}`,
         id: e.id || `ev-${idx + 1}`,
         text: e.text || `Evidence content snippet ${idx + 1}`,
@@ -168,88 +188,15 @@ export class FullPipelineService {
     };
 
     // Step 5 & 6: Dynamic Verified Claims Construction with Real Supporting Evidence Links
-    const verifiedClaims = [
-      {
-        claimId: 'clm-001',
-        statement: `${query} is supported by empirical evaluation and multi-center benchmark validation.`,
-        verificationStatus: 'SUPPORTED',
-        confidence: 95,
-        supportingEvidenceIds: [evidenceBatch.evidence[0]?.evidenceId || 'ev-1', evidenceBatch.evidence[1]?.evidenceId || 'ev-2'],
-        evidenceLinks: [
-          {
-            title: trustedSources[0]?.title || 'IEEE Xplore Digital Library',
-            url: trustedSources[0]?.url || 'https://ieeexplore.ieee.org',
-            domain: trustedSources[0]?.domain || 'ieee.org',
-            publisher: trustedSources[0]?.publisher || 'IEEE',
-            snippet: `Empirical findings published by ${trustedSources[0]?.publisher || 'IEEE'} confirm statistical reliability and performance gains.`
-          },
-          {
-            title: trustedSources[1]?.title || 'PubMed Biomedical Database',
-            url: trustedSources[1]?.url || 'https://pubmed.ncbi.nlm.nih.gov',
-            domain: trustedSources[1]?.domain || 'pubmed.ncbi.nlm.nih.gov',
-            publisher: trustedSources[1]?.publisher || 'NIH / NLM',
-            snippet: `Independent benchmarking demonstrates high cross-validated accuracy.`
-          }
-        ],
-        explanation: `Verified across institutional repositories (${trustedSources[0]?.publisher || 'IEEE'} and ${trustedSources[1]?.publisher || 'NIH'}) with 95% semantic alignment.`
-      },
-      {
-        claimId: 'clm-002',
-        statement: `Peer-reviewed scientific literature confirms high diagnostic consistency for ${query}.`,
-        verificationStatus: 'VERIFIED',
-        confidence: 92,
-        supportingEvidenceIds: [evidenceBatch.evidence[2]?.evidenceId || 'ev-3'],
-        evidenceLinks: [
-          {
-            title: trustedSources[2]?.title || 'Nature International Journal of Science',
-            url: trustedSources[2]?.url || 'https://nature.com',
-            domain: trustedSources[2]?.domain || 'nature.com',
-            publisher: trustedSources[2]?.publisher || 'Springer Nature',
-            snippet: `Peer-reviewed study confirms high precision across diagnostic panels.`
-          }
-        ],
-        explanation: `Directly supported by peer-reviewed evidence from ${trustedSources[2]?.title || trustedSources[0]?.title}.`
-      },
-      {
-        claimId: 'clm-003',
-        statement: `Unverified blog posts claiming zero efficacy or total replacement are contradicted by official institutional guidelines.`,
-        verificationStatus: 'CONTRADICTED',
-        confidence: 88,
-        supportingEvidenceIds: [evidenceBatch.evidence[3]?.evidenceId || 'ev-4'],
-        evidenceLinks: [
-          {
-            title: trustedSources[3]?.title || 'World Health Organization',
-            url: trustedSources[3]?.url || 'https://who.int',
-            domain: trustedSources[3]?.domain || 'who.int',
-            publisher: trustedSources[3]?.publisher || 'WHO',
-            snippet: `Official guidelines state decision-support systems complement human expert oversight.`
-          }
-        ],
-        explanation: `Contradicted by high-authority government and academic publications.`
-      },
-      {
-        claimId: 'clm-004',
-        statement: `Long-term longitudinal effects of ${query} require additional continuous clinical observation.`,
-        verificationStatus: 'PARTIALLY_SUPPORTED',
-        confidence: 84,
-        supportingEvidenceIds: [evidenceBatch.evidence[4]?.evidenceId || 'ev-5'],
-        evidenceLinks: [
-          {
-            title: trustedSources[4]?.title || 'Centers for Disease Control',
-            url: trustedSources[4]?.url || 'https://cdc.gov',
-            domain: trustedSources[4]?.domain || 'cdc.gov',
-            publisher: trustedSources[4]?.publisher || 'CDC',
-            snippet: `Initial cohort studies support short-term findings; multi-year tracking ongoing.`
-          }
-        ],
-        explanation: `Partially supported by initial pilot studies; comprehensive longitudinal data is ongoing.`
-      }
-    ];
+    const verificationService = new ClaimVerificationService();
 
-    const verificationBatch = {
-      query,
-      verifiedClaims
-    };
+    const verificationBatch =
+      await verificationService.verify({
+        query,
+        evidenceBatch
+      });
+
+    const verifiedClaims = verificationBatch.verifiedClaims;
 
     // Step 7: Source Authenticity Evaluation
     const authenticityService = new SourceAuthenticityService(new InMemoryCache());

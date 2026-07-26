@@ -41,14 +41,20 @@ export class PipelineController extends BaseController {
       // --- THE WHITESPACE HEARTBEAT HACK ---
 
       // 1. Tell the browser we are streaming chunks of JSON
+      const padding = ' '.repeat(4096)
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Transfer-Encoding', 'chunked');
       res.flushHeaders(); // Send the headers immediately so Render knows we are alive
 
       // 2. Trickle out a blank space every 15 seconds to reset Render's timeout
       const keepAlive = setInterval(() => {
-        res.write(' ');
+        res.write(padding);
       }, 15000);
+
+      req.on('close', () => {
+        clearInterval(keepAlive);
+        console.log('[PipelineController] Client disconnected. Heartbeat stopped.');
+      });
 
       try {
         const result = await FullPipelineService.executeFullVerification({

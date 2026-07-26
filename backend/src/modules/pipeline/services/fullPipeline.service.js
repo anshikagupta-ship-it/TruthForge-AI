@@ -137,6 +137,10 @@ export class FullPipelineService {
         "--output",
         csvPath // 2. Write to the unique file
       ]);
+      const scriptTimeout = setTimeout(() => {
+        py.kill(); // Assassinate the zombie process
+        reject(new Error("Python retriever timed out after 200 seconds."));
+      }, 200000);
       py.stdout.on("data", d => console.log(d.toString()));
       py.stderr.on("data", d => console.error(d.toString()));
       py.on("close", code => {

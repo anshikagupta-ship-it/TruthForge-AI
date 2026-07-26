@@ -16,8 +16,11 @@ import { ConfidenceEngineService } from '../../confidence/services/confidenceEng
 import { EvidenceLineageService } from '../../lineage/services/evidenceLineage.service.js';
 import { ReportGeneratorService } from '../../report/services/reportGenerator.service.js';
 import { logger } from '../../../utils/logger.js';
-import { spawn } from "child_process";
+import { spawn, spawnSync } from "child_process";
 import fs from "fs/promises";
+
+import path from "path";
+import fsSync from "fs";
 
 // Domain Trusted Source Mappings according to kartikeya specification
 const DOMAIN_SOURCES_MAP = {
@@ -126,6 +129,9 @@ export class FullPipelineService {
 
 
     await fs.mkdir("./temp", { recursive: true });
+    const version = spawnSync("python3", ["--version"], { encoding: "utf8" });
+
+    console.log(version);
 
 
     // 1. Define a unique file path for this specific pipeline run
@@ -136,6 +142,13 @@ export class FullPipelineService {
       script: "./retriever/index.py",
       query,
       csvPath
+    });
+    const script = path.resolve("./retriever/index.py");
+
+    console.log({
+      cwd: process.cwd(),
+      script,
+      exists: fsSync.existsSync(script),
     });
     await new Promise((resolve, reject) => {
 
@@ -153,6 +166,9 @@ export class FullPipelineService {
       py.on("error", err => {
         console.error("[PYTHON SPAWN ERROR]", err);
         reject(err);
+      });
+      py.on("spawn", () => {
+        console.log("[PYTHON SPAWNED]");
       });
 
       const scriptTimeout = setTimeout(() => {

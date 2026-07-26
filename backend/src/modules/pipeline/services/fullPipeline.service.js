@@ -138,25 +138,44 @@ export class FullPipelineService {
       csvPath
     });
     await new Promise((resolve, reject) => {
-      const py = spawn(process.platform === "win32" ? "python" : "python3", [
-        "./retriever/index.py",
-        "--query",
-        query,
-        "--output",
-        csvPath // 2. Write to the unique file
-      ]);
+
+      const py = spawn(
+        process.platform === "win32" ? "python" : "python3",
+        [
+          "-u",
+          "./retriever/index.py",
+          "--query",
+          query,
+          "--output",
+          csvPath
+        ]
+      );
+
       const scriptTimeout = setTimeout(() => {
-        py.kill(); // Assassinate the zombie process
+        py.kill();
         reject(new Error("Python retriever timed out after 200 seconds."));
       }, 200000);
-      py.stdout.on("data", d => console.log(d.toString()));
-      py.stderr.on("data", d => console.error(d.toString()));
-      py.on("close", code => {
-        if (code === 0)
-          resolve();
-        else
-          reject(new Error("Retriever failed"));
+
+      py.stdout.on("data", d => {
+        console.log("[PYTHON]", d.toString());
       });
+
+      py.stderr.on("data", d => {
+        console.error("[PYTHON ERR]", d.toString());
+      });
+
+      py.on("close", code => {
+        clearTimeout(scriptTimeout);
+
+        console.log("[PYTHON CLOSED]", code);
+
+        if (code === 0) {
+          resolve();
+        } else {
+          reject(new Error(`Retriever failed with exit code ${code}`));
+        }
+      });
+
     });
 
     // 3. Read from the unique file

@@ -125,32 +125,36 @@ export class FullPipelineService {
 
 
     await fs.mkdir("./temp", { recursive: true });
-    await new Promise((resolve, reject) => {
 
+    // 1. Define a unique file path for this specific pipeline run
+    const csvPath = `./temp/matches_${queryId}.csv`;
+
+    await new Promise((resolve, reject) => {
       const py = spawn(process.platform === "win32" ? "python" : "python3", [
         "./retriever/index.py",
         "--query",
         query,
         "--output",
-        "./temp/matches.csv"
+        csvPath // 2. Write to the unique file
       ]);
-
       py.stdout.on("data", d => console.log(d.toString()));
-
       py.stderr.on("data", d => console.error(d.toString()));
-
       py.on("close", code => {
         if (code === 0)
           resolve();
         else
           reject(new Error("Retriever failed"));
       });
-
     });
+
+    // 3. Read from the unique file
     const csvContent = await fs.readFile(
-      "./temp/matches.csv",
+      csvPath,
       "utf8"
     );
+
+    // 4. Cleanup: Delete the file so the /temp folder doesn't bloat over time
+    await fs.unlink(csvPath).catch(err => console.warn(`Failed to cleanup ${csvPath}:`, err.message));
 
     const provider = new CsvEvidenceProvider();
 

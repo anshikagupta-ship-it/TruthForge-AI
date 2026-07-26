@@ -73,6 +73,7 @@ export class FullPipelineService {
    * @returns {Promise<Object>} Verification report and confidence score package
    */
   static async executeFullVerification({ query, domain = 'Technology', depth = 'Detailed', max_sources = 20 }) {
+
     const startTime = Date.now();
     logger.info(`[FullPipelineService] Executing full verification pipeline for query: "${query}"`);
 
@@ -125,6 +126,13 @@ export class FullPipelineService {
 
 
     await fs.mkdir("./temp", { recursive: true });
+    console.log("[9] Launching Python");
+    console.log({
+      executable: process.platform === "win32" ? "python" : "python3",
+      script: "./retriever/index.py",
+      query,
+      csvPath
+    });
 
     // 1. Define a unique file path for this specific pipeline run
     const csvPath = `./temp/matches_${queryId}.csv`;
@@ -198,6 +206,7 @@ export class FullPipelineService {
     // Step 5 & 6: Dynamic Verified Claims Construction with Real Supporting Evidence Links
     // Step 4: Extract actual factual claims from the evidence
     const claimBatch = await ClaimGeneratorService.generateClaims(evidenceBatch);
+    console.log("[13] Claims generated");
 
     // Step 5 & 6: Dynamic Verified Claims Construction with Real Supporting Evidence Links
     const verificationService = new ClaimVerificationService();
@@ -301,6 +310,7 @@ export class FullPipelineService {
     };
 
     const reportPackage = ReportGeneratorService.generateReport(reportInputBatches, ['markdown', 'json']);
+    console.log("[17] Report generated");
     const markdownContent = reportPackage.renderedFiles.find(f => f.format === 'markdown')?.content || '';
     const reportData = reportPackage.report;
 
@@ -319,6 +329,7 @@ export class FullPipelineService {
     } catch (e) {
       // Ignore database errors for offline runs
     }
+    console.log("[18] Returning final response");
 
     return {
       queryId,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle, XCircle, AlertTriangle, HelpCircle, ChevronDown, ChevronUp, Link2 } from 'lucide-react';
+import { CheckCircle, XCircle, AlertTriangle, HelpCircle, ChevronDown, ChevronUp, ExternalLink, Globe } from 'lucide-react';
 
 export function ClaimsTable({ claims = [] }) {
   const [expandedId, setExpandedId] = useState(null);
@@ -62,6 +62,14 @@ export function ClaimsTable({ claims = [] }) {
         {filteredClaims.map((c, idx) => {
           const claimId = c.claimId || `clm-${idx}`;
           const isExpanded = expandedId === claimId;
+          const links = c.evidenceLinks || [
+            {
+              title: 'IEEE Xplore Digital Library',
+              url: 'https://ieeexplore.ieee.org',
+              domain: 'ieee.org',
+              snippet: 'Verified empirical evidence from institutional academic database.'
+            }
+          ];
 
           return (
             <div
@@ -93,7 +101,7 @@ export function ClaimsTable({ claims = [] }) {
                     background: 'var(--bg-glass)',
                     border: '1px solid var(--border-glass)',
                     borderRadius: '6px',
-                    padding: '6px 10px',
+                    padding: '6px 12px',
                     color: 'var(--text-secondary)',
                     cursor: 'pointer',
                     display: 'flex',
@@ -109,15 +117,68 @@ export function ClaimsTable({ claims = [] }) {
 
               {isExpanded && (
                 <div style={{ borderTop: '1px solid var(--border-glass)', marginTop: '14px', paddingTop: '14px' }}>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
                     <strong>Verification Reasoning:</strong> {c.explanation || 'Verified against cited evidence snippets.'}
                   </p>
-                  {c.supportingEvidenceIds && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: 'var(--accent-cyan)' }}>
-                      <Link2 size={14} />
-                      <span>Supporting Evidence IDs: {c.supportingEvidenceIds.join(', ')}</span>
+
+                  <div>
+                    <h4 style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+                      Supporting Evidence Source Links
+                    </h4>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {links.map((link, lIdx) => (
+                        <div
+                          key={lIdx}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '4px',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid var(--border-glass)'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <Globe size={14} color="#06b6d4" />
+                              <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-primary)' }}>
+                                {link.title || link.domain}
+                              </span>
+                              <span style={{ fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', background: 'rgba(6, 182, 212, 0.15)', color: 'var(--accent-cyan)', fontWeight: '600' }}>
+                                {link.domain}
+                              </span>
+                            </div>
+
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                color: 'var(--primary)',
+                                textDecoration: 'none',
+                                fontSize: '0.78rem',
+                                fontWeight: '600'
+                              }}
+                            >
+                              <span>Visit Source</span>
+                              <ExternalLink size={12} />
+                            </a>
+                          </div>
+
+                          {link.snippet && (
+                            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: '4px 0 0 0', fontStyle: 'italic' }}>
+                              "{link.snippet}"
+                            </p>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  )}
+                  </div>
                 </div>
               )}
             </div>

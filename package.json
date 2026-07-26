@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "cd backend && npm install && cd ../frontend && npm install",
     "start": "cd backend && npm start",
+    "build": "cd frontend && npm run build",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "dev": "cd backend && npm run dev",

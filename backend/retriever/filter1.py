@@ -294,6 +294,9 @@ def export_to_csv(data: list, filename: str = "matches.csv"):
     """
     if not data:
         print("No data to export.")
+        with open(filename, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=["query", "source_url", "semantic_score", "bonus", "score", "text"])
+            writer.writeheader()
         return
 
     # Extract headers from the first dictionary's keys

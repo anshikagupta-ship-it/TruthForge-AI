@@ -311,16 +311,16 @@ def export(query,file_name):
 
 import argparse
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
 
-    parser.add_argument("--query", required=True)
-    parser.add_argument("--output", default="matches.csv")
+parser = argparse.ArgumentParser()
 
-    args = parser.parse_args()
+parser.add_argument("--query", required=True)
+parser.add_argument("--output", default="matches.csv")
 
-    export(
-        query=args.query,
-        file_name=args.output
-    )
+args = parser.parse_args()
+
+export(
+    query=args.query,
+    file_name=args.output
+)
 

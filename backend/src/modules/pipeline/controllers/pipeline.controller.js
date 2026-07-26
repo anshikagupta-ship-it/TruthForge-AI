@@ -41,16 +41,11 @@ export class PipelineController extends BaseController {
 
       // --- THE WHITESPACE HEARTBEAT HACK ---
 
-      // 1. Tell the browser we are streaming chunks of JSON
-      const padding = ' '.repeat(4096)
+
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Transfer-Encoding', 'chunked');
       res.flushHeaders(); // Send the headers immediately so Render knows we are alive
 
-      // 2. Trickle out a blank space every 15 seconds to reset Render's timeout
-      keepAlive = setInterval(() => {
-        res.write(padding);
-      }, 15000);
 
       req.on('close', () => {
         if (keepAlive) {

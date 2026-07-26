@@ -1,6 +1,6 @@
-github_limit = 10
+github_limit = 15
 gov_limit = 15
-research_limit = 5
+research_limit = 10
 threshold = 0.5
 
 

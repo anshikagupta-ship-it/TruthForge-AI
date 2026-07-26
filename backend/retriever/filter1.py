@@ -7,7 +7,7 @@ from enum import Enum
 print("importing model",flush=True)
 from transformers import AutoTokenizer, AutoModel
 import torch
-import torch.nn.functional as F
+
 print("Model Imported",flush=True)
 
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
@@ -60,8 +60,9 @@ def encode(texts):
     sum_mask = torch.clamp(mask_expanded.sum(1), min=1e-9)
     pooled_embeddings = sum_embeddings / sum_mask
 
-    # Normalize
-    normalized_embeddings = F.normalize(pooled_embeddings, p=2, dim=1)
+    # Normalize using pure torch
+    norm = pooled_embeddings.norm(p=2, dim=1, keepdim=True)
+    normalized_embeddings = pooled_embeddings / torch.clamp(norm, min=1e-12)
 
     return normalized_embeddings.cpu()
 

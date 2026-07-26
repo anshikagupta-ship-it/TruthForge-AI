@@ -316,6 +316,6 @@ if __name__ == "__main__":
 
     export(
         query=args.query,
-        output_file=args.output
+        file_name=args.output
     )
 

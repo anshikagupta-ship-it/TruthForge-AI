@@ -124,7 +124,7 @@ export class FullPipelineService {
 
 
 
-
+    await fs.mkdir("./temp", { recursive: true });
     await new Promise((resolve, reject) => {
 
       const py = spawn(process.platform === "win32" ? "python" : "python3", [

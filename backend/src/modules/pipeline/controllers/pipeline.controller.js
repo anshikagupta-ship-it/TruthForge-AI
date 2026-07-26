@@ -8,6 +8,7 @@ export class PipelineController extends BaseController {
   }
 
   async executeFullVerification(req, res, next) {
+    let keepAlive = null;
     try {
       let queryStr = '';
       let domain = 'Technology';
@@ -47,10 +48,15 @@ export class PipelineController extends BaseController {
       res.flushHeaders(); // Send the headers immediately so Render knows we are alive
 
       // 2. Trickle out a blank space every 15 seconds to reset Render's timeout
-
+      keepAlive = setInterval(() => {
+        res.write(padding);
+      }, 15000);
 
       req.on('close', () => {
-        clearInterval(keepAlive);
+        if (keepAlive) {
+          clearInterval(keepAlive);
+          keepAlive = null;
+        }
         console.log('[PipelineController] Client disconnected. Heartbeat stopped.');
       });
 
@@ -63,7 +69,10 @@ export class PipelineController extends BaseController {
         });
 
         // 3. Stop the heartbeat when the heavy lifting is done
-        clearInterval(keepAlive);
+        if (keepAlive) {
+          clearInterval(keepAlive);
+          keepAlive = null;
+        }
 
         // 4. Send the actual final JSON payload and close the connection
         res.write(JSON.stringify({
@@ -75,7 +84,10 @@ export class PipelineController extends BaseController {
 
       } catch (err) {
         // Handle failure cleanly while streaming
-        clearInterval(keepAlive);
+        if (keepAlive) {
+          clearInterval(keepAlive);
+          keepAlive = null;
+        }
         res.write(JSON.stringify({
           success: false,
           message: err.message || 'Verification pipeline error'

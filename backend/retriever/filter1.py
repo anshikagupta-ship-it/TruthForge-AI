@@ -159,7 +159,7 @@ def phrase_bonus(query: str, text: str):
 
 
 class SemanticFilter:
-    def __init__(self, model=None, model_name='all-MiniLM-L6-v2'):
+    def __init__(self, model=None):
         """
         Initializes the filter. Accepts a pre-loaded model to prevent
         reloading it into memory multiple times across executions.
@@ -169,8 +169,8 @@ class SemanticFilter:
             print("Using pre-loaded semantic model...")
             self.model = model
         else:
-            print(f"Loading semantic model '{model_name}'...")
-            self.model = SentenceTransformer(model_name)
+
+            self.model = get_model()
 
         print(f"Model initialization took {time.perf_counter() - start_time:.2f}s\n")
 

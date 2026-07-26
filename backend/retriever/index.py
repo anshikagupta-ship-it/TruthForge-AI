@@ -36,9 +36,9 @@ except ImportError:
 # Make sure you create a .env file containing: GITHUB_TOKEN=ghp_your_actual_token
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
 
-model = filter1.model
 
-ai_filter = filter1.SemanticFilter(model=model)
+
+ai_filter = filter1.SemanticFilter()
 
 TIMEOUT = 15
 HEADERS = {

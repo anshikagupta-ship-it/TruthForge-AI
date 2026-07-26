@@ -4,9 +4,9 @@ import time
 import concurrent.futures
 from enum import Enum
 import time
-
+print("importing model",flush=True)
 from sentence_transformers import SentenceTransformer, util
-
+print("Model Imported",flush=True)
 _model = None
 
 def get_model():

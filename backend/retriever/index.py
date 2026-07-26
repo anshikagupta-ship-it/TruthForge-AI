@@ -39,7 +39,7 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
 
 
 ai_filter = filter1.SemanticFilter()
-
+model = ai_filter.model
 TIMEOUT = 15
 HEADERS = {
     "User-Agent": "ResearchVerificationBot/1.0",

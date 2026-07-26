@@ -1,7 +1,6 @@
 import { BaseController } from '../../../common/controllers/base.controller.js';
 import { pipelineService } from '../services/pipeline.service.js';
 import { FullPipelineService } from '../services/fullPipeline.service.js';
-import { sendSuccess } from '../../../utils/response.js';
 
 export class PipelineController extends BaseController {
   constructor() {
@@ -39,14 +38,47 @@ export class PipelineController extends BaseController {
         });
       }
 
-      const result = await FullPipelineService.executeFullVerification({
-        query: queryStr.trim(),
-        domain,
-        depth,
-        max_sources
-      });
+      // --- THE WHITESPACE HEARTBEAT HACK ---
 
-      return sendSuccess(res, result, 'Full verification pipeline completed successfully', 200);
+      // 1. Tell the browser we are streaming chunks of JSON
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Transfer-Encoding', 'chunked');
+      res.flushHeaders(); // Send the headers immediately so Render knows we are alive
+
+      // 2. Trickle out a blank space every 15 seconds to reset Render's timeout
+      const keepAlive = setInterval(() => {
+        res.write(' ');
+      }, 15000);
+
+      try {
+        const result = await FullPipelineService.executeFullVerification({
+          query: queryStr.trim(),
+          domain,
+          depth,
+          max_sources
+        });
+
+        // 3. Stop the heartbeat when the heavy lifting is done
+        clearInterval(keepAlive);
+
+        // 4. Send the actual final JSON payload and close the connection
+        res.write(JSON.stringify({
+          success: true,
+          message: 'Full verification pipeline completed successfully',
+          data: result
+        }));
+        res.end();
+
+      } catch (err) {
+        // Handle failure cleanly while streaming
+        clearInterval(keepAlive);
+        res.write(JSON.stringify({
+          success: false,
+          message: err.message || 'Verification pipeline error'
+        }));
+        res.end();
+      }
+
     } catch (err) {
       next(err);
     }
@@ -54,4 +86,3 @@ export class PipelineController extends BaseController {
 }
 
 export const pipelineController = new PipelineController();
-

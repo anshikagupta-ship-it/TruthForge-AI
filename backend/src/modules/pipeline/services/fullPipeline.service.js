@@ -156,7 +156,7 @@ export class FullPipelineService {
         process.platform === "win32" ? "python" : "python3",
         [
           "-u",
-          "./retriever/test.py",
+          "./retriever/index.py",
           "--query",
           query,
           "--output",

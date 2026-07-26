@@ -6,7 +6,7 @@ selectolax
 duckduckgo-search
 feedparser
 
-sentence-transformers
+
 torch
 transformers
 huggingface-hub

@@ -13,7 +13,7 @@ import csv
 import clean_csv
 from concurrent.futures import ThreadPoolExecutor
 print(5,flush=True)
-from sentence_transformers import util
+import torch
 
 try:
     from pypdf import PdfReader
@@ -39,7 +39,7 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
 
 
 ai_filter = filter1.SemanticFilter()
-model = ai_filter.model
+
 TIMEOUT = 15
 HEADERS = {
     "User-Agent": "ResearchVerificationBot/1.0",
@@ -118,7 +118,7 @@ class KnowledgeScraper:
             print(f"ArXiv API failed: {e}")
             return []
 
-        query_embedding = model.encode(query, convert_to_tensor=True)
+        query_embedding = filter1.encode(query)
 
         for e in root.findall("a:entry", ns):
 
@@ -126,13 +126,15 @@ class KnowledgeScraper:
                 title = e.find("a:title", ns).text.strip()
                 abstract = e.find("a:summary", ns).text.strip()
 
-                score = util.cos_sim(
-                    query_embedding,
-                    model.encode(
-                        title + "\n" + abstract,
-                        convert_to_tensor=True
-                    )
-                ).item()
+
+                doc_embedding = filter1.encode(
+                    title + "\n" + abstract
+                )
+
+                score = torch.matmul(
+                            query_embedding,
+                            doc_embedding.T
+                        ).squeeze().item()
 
                 score += filter1.phrase_bonus(query, title + " " + abstract)
 

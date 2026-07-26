@@ -3,19 +3,67 @@ import csv
 import time
 import concurrent.futures
 from enum import Enum
-import time
+
 print("importing model",flush=True)
-from sentence_transformers import SentenceTransformer, util
+from transformers import AutoTokenizer, AutoModel
+import torch
+import torch.nn.functional as F
 print("Model Imported",flush=True)
+
+MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 _model = None
+_tokenizer = None
+
 
 def get_model():
-    global _model
-    if _model is None:
+    global _model, _tokenizer
+    if _model is None or _tokenizer is None:
         print("Loading model...", flush=True)
-        _model = SentenceTransformer("all-MiniLM-L6-v2")
-    return _model
+        _tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        _model = AutoModel.from_pretrained(MODEL_NAME)
+        device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu"
+        )
 
+        _model.to(device)
+        _model.eval()
+    return _tokenizer, _model
+
+
+def encode(texts):
+    if isinstance(texts, str):
+        texts = [texts]
+
+    tokenizer, model = get_model()
+
+    inputs = tokenizer(
+            texts,
+            padding=True,
+            truncation=True,
+            max_length=512,
+            return_tensors="pt"
+        )
+    device = torch.device(
+                "cuda" if torch.cuda.is_available() else "cpu"
+            )
+    inputs = {k: v.to(device) for k, v in inputs.items()}
+
+    with torch.no_grad():
+        outputs = model(**inputs)
+
+    embeddings = outputs.last_hidden_state
+    attention_mask = inputs['attention_mask']
+
+    # Masked mean pooling
+    mask_expanded = attention_mask.unsqueeze(-1).expand(embeddings.size()).float()
+    sum_embeddings = torch.sum(embeddings * mask_expanded, 1)
+    sum_mask = torch.clamp(mask_expanded.sum(1), min=1e-9)
+    pooled_embeddings = sum_embeddings / sum_mask
+
+    # Normalize
+    normalized_embeddings = F.normalize(pooled_embeddings, p=2, dim=1)
+
+    return normalized_embeddings.cpu()
 
 
 class SourceCategory(Enum):
@@ -165,12 +213,7 @@ class SemanticFilter:
         reloading it into memory multiple times across executions.
         """
         start_time = time.perf_counter()
-        if model:
-            print("Using pre-loaded semantic model...")
-            self.model = model
-        else:
-
-            self.model = get_model()
+        self.tokenizer,self.model = get_model()
 
         print(f"Model initialization took {time.perf_counter() - start_time:.2f}s\n")
 
@@ -227,12 +270,11 @@ class SemanticFilter:
             paragraphs = self.chunk_text(cleaned_text)
 
         # 2. Convert query and paragraphs into vector embeddings
-        # convert_to_tensor=True keeps data on the GPU if available, or optimized CPU formats
-        query_embedding = self.model.encode(query, convert_to_tensor=True)
-        para_embeddings = self.model.encode(paragraphs, convert_to_tensor=True)
+        query_embedding = encode(query)
+        para_embeddings = encode(paragraphs)
 
         # 3. Calculate Cosine Similarity between the query and ALL paragraphs at once
-        cosine_scores = util.cos_sim(query_embedding, para_embeddings)[0]
+        cosine_scores = torch.matmul(query_embedding, para_embeddings.T)[0]
 
         # 4. Extract the paragraphs that meet our confidence threshold
         relevant_data = []
@@ -319,5 +361,3 @@ def export_to_csv(data: list, filename: str = "matches.csv"):
         print(f"\nSuccessfully exported {len(data)} matches to {filename}")
     except Exception as e:
         print(f"Error exporting to CSV: {e}")
-
-

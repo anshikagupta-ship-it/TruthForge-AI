@@ -26,7 +26,7 @@ export async function checkBackendHealth() {
   return { isHealthy: false, baseUrl: RENDER_API_BASE, data: null };
 }
 
-export async function executeFullVerification({ query, domain = 'Technology', depth = 'Detailed', max_sources = 20 }) {
+export async function executeFullVerification({ query, domain = 'Technology', depth = 'Detailed', max_sources = 10 }) {
   const targetUrls = [API_BASE_URL, LOCAL_API_BASE, RENDER_API_BASE];
   let lastError = null;
 

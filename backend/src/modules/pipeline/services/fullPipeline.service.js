@@ -188,13 +188,16 @@ export class FullPipelineService {
     };
 
     // Step 5 & 6: Dynamic Verified Claims Construction with Real Supporting Evidence Links
-    const verificationService = new ClaimVerificationService();
+    // Step 4: Extract actual factual claims from the evidence
+    const claimBatch = await ClaimGeneratorService.generateClaims(evidenceBatch);
 
-    const verificationBatch =
-      await verificationService.verify({
-        query,
-        evidenceBatch
-      });
+    // Step 5 & 6: Dynamic Verified Claims Construction with Real Supporting Evidence Links
+    const verificationService = new ClaimVerificationService();
+    const verificationBatch = await verificationService.verify({
+      query,
+      evidenceBatch,
+      claimBatch // You must pass the generated claims to the verifier!
+    });
 
     const verifiedClaims = verificationBatch.verifiedClaims;
 
@@ -245,7 +248,8 @@ export class FullPipelineService {
           verificationStatus: vc.verificationStatus,
           confidence: vc.confidence,
           citedEvidence: vc.supportingEvidenceIds,
-          sources: [trustedSources[0].domain]
+          // FIX 1: Use actual source domains from the claim instead of trustedSources[0]
+          sources: vc.sourceDomains && vc.sourceDomains.length > 0 ? vc.sourceDomains : ['unknown-source.com']
         }))
       },
       confidenceBatch: {
@@ -262,12 +266,14 @@ export class FullPipelineService {
       },
       sourceAuthenticityBatch: {
         profiles: evaluatedSourcesList.map(s => ({
-          domain: s.domain || s.sourceDomain || 'ieee.org',
+          // FIX 2: Remove the 'ieee.org' fallback
+          domain: s.domain || s.sourceDomain || 'unknown',
           trustLevel: 'GOVERNMENT',
           authenticityScore: s.authenticityScore || s.trustScore || 95,
           tld: 'org'
         }))
       },
+
       evidenceLineageBatch: {
         completeChains: verifiedClaims.length,
         partialChains: 0,
@@ -275,7 +281,13 @@ export class FullPipelineService {
         graphStatistics: { totalNodes: 8, totalEdges: 12, rootHash: evidenceLineageBatch.metadata?.graphHash || '0x9918a2bc' },
         claims: verifiedClaims.map(vc => ({
           claimId: vc.claimId,
-          provenancePath: ['root', vc.claimId, 'ev-1', trustedSources[0].domain]
+          // FIX 3: Dynamically construct the provenance path instead of hardcoding 'ev-1' and IEEE
+          provenancePath: [
+            'root',
+            vc.claimId,
+            ...(vc.supportingEvidenceIds || []),
+            ...(vc.sourceDomains || [])
+          ]
         }))
       }
     };

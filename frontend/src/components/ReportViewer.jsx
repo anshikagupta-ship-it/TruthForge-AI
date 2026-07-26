@@ -103,7 +103,7 @@ function renderFormattedReport(markdownText) {
       const bulletContent = trimmed.replace(/^[-*]\s+/, '');
       elements.push(
         <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', margin: '6px 0', paddingLeft: '8px' }}>
-          <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>•</span>
+          <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>&bull;</span>
           <span style={{ fontSize: '0.9rem', color: 'var(--text-primary)' }} dangerouslySetInnerHTML={{ __html: parseInline(bulletContent) }} />
         </div>
       );
@@ -151,14 +151,19 @@ export function ReportViewer({ markdown = '', query = '' }) {
 
     // Convert markdown into clean HTML for print document
     let cleanHtml = markdown
+      // Sanitize tags but protect blockquotes
       .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      // Typography
       .replace(/^# (.*$)/gim, '<h1 style="color:#4f46e5;border-bottom:2px solid #e5e7eb;padding-bottom:6px">$1</h1>')
       .replace(/^## (.*$)/gim, '<h2 style="color:#1f2937;margin-top:20px;border-bottom:1px solid #f3f4f6">$1</h2>')
       .replace(/^### (.*$)/gim, '<h3 style="color:#6b21a8;margin-top:16px">$1</h3>')
       .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-      .replace(/^\- (.*$)/gim, '<ul><li style="margin:4px 0">$1</li></ul>')
-      .replace(/\n\n/gim, '<br/>');
-
+      // Fix the blockquote rendering (checking for the sanitized &gt;)
+      .replace(/^&gt; (.*$)/gim, '<blockquote style="border-left:4px solid #4f46e5; padding:12px 16px; margin:16px 0; background:#f9fafb; color:#4b5563; font-style:italic; border-radius:4px;">$1</blockquote>')
+      // Fix the list madness: Render as standalone list items with proper margin instead of nesting a billion <ul> tags
+      .replace(/^\- (.*$)/gim, '<li style="margin:6px 0 6px 24px; color:#374151;">$1</li>')
+      // Paragraph spacing
+      .replace(/\n\n/gim, '<br/><br/>');
     const htmlContent = `
       <!DOCTYPE html>
       <html>

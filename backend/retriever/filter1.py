@@ -16,7 +16,7 @@ def get_model():
         _model = SentenceTransformer("all-MiniLM-L6-v2")
     return _model
 
-model = get_model()
+
 
 class SourceCategory(Enum):
     CODE_DOCS = "code_docs"
